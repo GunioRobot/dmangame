@@ -92,7 +92,7 @@ def draw_map(cairo_context, width, height, world_data, turn_data):
 
       team = building["team"]
       if team:
-        color = world_data["colors"][team] 
+        color = world_data["colors"][team]
       else:
         color = (0,0,0)
       x, y = building_data["position"]

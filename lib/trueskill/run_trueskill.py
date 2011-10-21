@@ -77,11 +77,11 @@ if __name__ == "__main__":
 
         ratings = {}
         run(games, ratings, True)
-        print_ratings(ratings)        
+        print_ratings(ratings)
 
     example_1a()
 
-    print 
+    print
     def example_1b():
         games = [ { 'game_id': 0,
                     'map': 'random4',
@@ -94,7 +94,7 @@ if __name__ == "__main__":
         out = [(ratings[k], k) for k in ratings.keys()]
         out.sort()
         out.reverse()
-        print_ratings(ratings)        
+        print_ratings(ratings)
 
     example_1b()
 
@@ -109,7 +109,7 @@ if __name__ == "__main__":
                   { 'players': ['a', 'b', 'c', 'd'],
                     'rank': [0,1,2,3]}]
 
-                  
+
 
         ratings = {'c': (25, 8), 'b': (23, 5), 'd': (28,5),
                     'a': (24, 6)}
@@ -117,4 +117,4 @@ if __name__ == "__main__":
         print_ratings(ratings)
     example_2()
 
-    
+

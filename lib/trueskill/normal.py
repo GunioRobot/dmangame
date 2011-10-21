@@ -10,7 +10,7 @@ def cdf(x):
 
     From http://en.wikipedia.org/wiki/Bc_programming_language.
 
-    Algorithm is from 
+    Algorithm is from
     George Marsaglia, Journal of Statistical Software,
     July 2004, Vol 11, Issue 5
     """
@@ -38,16 +38,16 @@ def newtons_method(f, fp, x0, eps=1e-15):
 
     http://en.wikipedia.org/wiki/Newton's_method
     """
-    
+
     i = 0
     while True:
         d = fp(x0)
         if d == 0.0:
             # derivative is zero.  stuck.
             raise Exception("Cannot use newton's method")
-        
+
         x1 = x0 - f(x0) / d
-        
+
         if abs(x0-x1) < eps: break
         i += 1
         if i > 20 : break
@@ -67,8 +67,8 @@ def invcdf(x):
         def f(y):
             return cdf(y) - x
         return newtons_method(f, pdf, 0.0)
-    
-        
-        
 
-    
+
+
+
+

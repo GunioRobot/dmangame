@@ -35,7 +35,7 @@ LOADED_AI_MODULES=set()
 # In CLI mode, this variable controls how often the game state is saved to
 # file in order to conserve RAM.
 # WARNING: the buffer size needs to be the minimum amount of
-# turns needed to see a unit fire a bullet. 
+# turns needed to see a unit fire a bullet.
 BUFFER_SIZE=250
 
 

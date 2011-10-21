@@ -12,7 +12,7 @@ Flot plugin for thresholding data. Controlled through the option
 or in a specific series
 
   $.plot($("#placeholder"), [{ data: [ ... ], threshold: { ... }}])
-  
+
 An array can be passed for multiple thresholding
 
   threshold: [{
@@ -40,7 +40,7 @@ events.
     var options = {
         series: { threshold: null } // or { below: number, color: color spec}
     };
-    
+
     function init(plot) {
         function thresholdData(plot, s, datapoints, below, color) {
             var ps = datapoints.pointsize, i, x, y, p, prevp,
@@ -52,7 +52,7 @@ events.
             thresholded.threshold = null;
             thresholded.originSeries = s;
             thresholded.data = [];
- 
+
             var origpoints = datapoints.points,
                 addCrossingPoints = s.lines.show;
 
@@ -76,7 +76,7 @@ events.
                     prevp.push(below);
                     for (m = 2; m < ps; ++m)
                         prevp.push(origpoints[i + m]);
-                    
+
                     p.push(null); // start new segment
                     p.push(null);
                     for (m = 2; m < ps; ++m)
@@ -95,22 +95,22 @@ events.
 
             datapoints.points = newpoints;
             thresholded.datapoints.points = threspoints;
-            
+
             if (thresholded.datapoints.points.length > 0)
                 plot.getData().push(thresholded);
-                
+
             // FIXME: there are probably some edge cases left in bars
         }
-        
+
         function processThresholds(plot, s, datapoints) {
             if (!s.threshold)
                 return;
-            
+
             if (s.threshold instanceof Array) {
                 s.threshold.sort(function(a, b) {
                     return a.below - b.below;
                 });
-                
+
                 $(s.threshold).each(function(i, th) {
                     thresholdData(plot, s, datapoints, th.below, th.color);
                 });
@@ -119,10 +119,10 @@ events.
                 thresholdData(plot, s, datapoints, s.threshold.below, s.threshold.color);
             }
         }
-        
+
         plot.hooks.processDatapoints.push(processThresholds);
     }
-    
+
     $.plot.plugins.push({
         init: init,
         options: options,

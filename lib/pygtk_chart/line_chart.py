@@ -53,7 +53,7 @@ POSITION_BOTTOM_RIGHT = 9
 POSITION_BOTTOM_LEFT = 10
 POSITION_TOP_LEFT = 11
 
-        
+
 def draw_point(context, x, y, radius, style):
     a = radius / 1.414 #1.414=sqrt(2)
     if style == pygtk_chart.POINT_STYLE_CIRCLE:
@@ -94,7 +94,7 @@ def draw_point(context, x, y, radius, style):
         context.rel_line_to(-a, -a)
         context.rel_line_to(a, -a)
         context.fill()
-        
+
 def draw_point_pixbuf(context, x, y, pixbuf):
     w = pixbuf.get_width()
     h = pixbuf.get_height()
@@ -103,7 +103,7 @@ def draw_point_pixbuf(context, x, y, pixbuf):
     context.set_source_pixbuf(pixbuf, ax, ay)
     context.rectangle(ax, ay, w, h)
     context.fill()
-    
+
 def draw_errors(context, rect, range_calc, x, y, errors, draw_x, draw_y, xaxis, yaxis, size):
     if (x, y) in errors:
         xerror, yerror = errors[(x, y)]
@@ -132,7 +132,7 @@ def draw_errors(context, rect, range_calc, x, y, errors, draw_x, draw_y, xaxis, 
             context.move_to(bottom[0] - size, bottom[1])
             context.rel_line_to(2 * size, 0)
             context.stroke()
-    
+
 def separate_data_and_errors(old_data):
     data = []
     errors = {}
@@ -187,8 +187,8 @@ class RangeCalculator:
             yrange = self._data_yrange
             if yrange[0] == yrange[1]:
                 yrange = (yrange[0], yrange[0] + 0.1)
-                
-                
+
+
         if xaxis.get_logarithmic():
             xrange = math.log10(xrange[0]), math.log10(xrange[1])
         if yaxis.get_logarithmic():
@@ -295,11 +295,11 @@ class LineChart(chart.Chart):
      - LineChart.grid
      - LineChart.xaxis
      - LineChart.yaxis
-     
+
     Properties
     ==========
     LineChart inherits properties from chart.Chart.
-    
+
     Signals
     =======
     The LineChart class inherits signals from chart.Chart.
@@ -310,7 +310,7 @@ class LineChart(chart.Chart):
     Callback signature for both signals:
     def callback(linechart, graph, (x, y))
     """
-    
+
     __gsignals__ = {"datapoint-clicked": (gobject.SIGNAL_RUN_LAST,
                                             gobject.TYPE_NONE,
                                             (gobject.TYPE_PYOBJECT,
@@ -319,7 +319,7 @@ class LineChart(chart.Chart):
                                             gobject.TYPE_NONE,
                                             (gobject.TYPE_PYOBJECT,
                                             gobject.TYPE_PYOBJECT))}
-    
+
     def __init__(self):
         chart.Chart.__init__(self)
         self.graphs = {}
@@ -328,23 +328,23 @@ class LineChart(chart.Chart):
         self.yaxis = YAxis(self._range_calc)
         self.grid = Grid(self._range_calc)
         self.legend = Legend()
-        
+
         self._highlighted_points = []
 
         self.xaxis.connect("appearance_changed", self._cb_appearance_changed)
         self.yaxis.connect("appearance_changed", self._cb_appearance_changed)
         self.grid.connect("appearance_changed", self._cb_appearance_changed)
         self.legend.connect("appearance_changed", self._cb_appearance_changed)
-        
+
     def __iter__(self):
         for name, graph in self.graphs.iteritems():
             yield graph
-            
+
     def _cb_button_pressed(self, widget, event):
         points = chart.get_sensitive_areas(event.x, event.y)
         for x, y, graph in points:
             self.emit("datapoint-clicked", graph, (x, y))
-    
+
     def _cb_motion_notify(self, widget, event):
         self._highlighted_points = chart.get_sensitive_areas(event.x, event.y)
         for x, y, graph in self._highlighted_points:
@@ -407,7 +407,7 @@ class LineChart(chart.Chart):
             self._do_draw_axes(context, rect)
             self._do_draw_graphs(context, rect)
         label.finish_drawing()
-        
+
         self.legend.draw(context, rect, self.graphs)
 
     def add_graph(self, graph):
@@ -446,7 +446,7 @@ class LineChart(chart.Chart):
         """
         self._range_calc.set_xrange(xrange)
         self.queue_draw()
-        
+
     def get_xrange(self):
         return self._range_calc.get_ranges(self.xaxis, self.yaxis)[0]
 
@@ -461,7 +461,7 @@ class LineChart(chart.Chart):
         """
         self._range_calc.set_yrange(yrange)
         self.queue_draw()
-        
+
     def get_yrange(self):
         return self._range_calc.get_ranges(self.xaxis, self.yaxis)[1]
 
@@ -469,13 +469,13 @@ class LineChart(chart.Chart):
 class Axis(ChartObject):
     """
     This class represents an axis on the line chart.
-    
+
     Properties
     ==========
     The Axis class inherits properties from chart_object.ChartObject.
     Additional properties:
      - label (a label for the axis, type: string)
-     - show-label (sets whether the axis' label should be shown, 
+     - show-label (sets whether the axis' label should be shown,
        type: boolean)
      - position (position of the axis, type: an axis position constant)
      - show-tics (sets whether tics should be shown at the axis,
@@ -486,7 +486,7 @@ class Axis(ChartObject):
        labels, default: str)
      - logarithmic (sets whether the axis should use a logarithmic
        scale, type: boolean).
-       
+
     Signals
     =======
     The Axis class inherits signals from chart_object.ChartObject.
@@ -678,20 +678,20 @@ class Axis(ChartObject):
         Returns the function currently used for labeling the tics.
         """
         return self.get_property("tic-format-function")
-        
+
     def set_logarithmic(self, log):
         """
         Set whether the axis should use logarithmic (base 10) scale.
-        
+
         @type log: boolean.
         """
         self.set_property("logarithmic", log)
         self.emit("appearance_changed")
-        
+
     def get_logarithmic(self):
         """
         Returns True if the axis uses logarithmic scale.
-        
+
         @return: boolean.
         """
         return self.get_property("logarithmic")
@@ -701,11 +701,11 @@ class XAxis(Axis):
     """
     This class represents the xaxis. It is used by the LineChart
     widget internally, there is no need to create an instance yourself.
-    
+
     Properties
     ==========
     The XAxis class inherits properties from Axis.
-    
+
     Signals
     =======
     The XAxis class inherits signals from Axis.
@@ -727,7 +727,7 @@ class XAxis(Axis):
     def _do_draw_tics(self, context, rect, yaxis):
         if self._show_tics:
             tics = self._range_calc.get_xtics(rect)
-            
+
             #calculate yaxis position
             (zx, zy) = self._range_calc.get_absolute_zero(rect, self, yaxis)
             if yaxis.get_position() == POSITION_LEFT:
@@ -744,7 +744,7 @@ class XAxis(Axis):
                 context.move_to(x, y + tic_height / 2)
                 context.rel_line_to(0, - tic_height)
                 context.stroke()
-                
+
                 if self._show_tic_labels:
                     if abs(x - zx) < 10:
                         #the distance to the yaxis is to small => do not draw label
@@ -789,11 +789,11 @@ class YAxis(Axis):
     """
     This class represents the yaxis. It is used by the LineChart
     widget internally, there is no need to create an instance yourself.
-    
+
     Properties
     ==========
     The YAxis class inherits properties from Axis.
-    
+
     Signals
     =======
     The YAxis class inherits signals from Axis.
@@ -837,7 +837,7 @@ class YAxis(Axis):
                     if abs(y - zy) < 10:
                         #distance to xaxis is to small => do not draw label
                         continue
-                        
+
                     pos = x - tic_width, y
                     text = self._tic_format_function(val)
                     tic_label = label.Label(pos, text, anchor=label.ANCHOR_RIGHT_CENTER, fixed=True)
@@ -876,7 +876,7 @@ class Grid(ChartObject):
     """
     A class representing the grid of the chart. It is used by the LineChart
     widget internally, there is no need to create an instance yourself.
-    
+
     Properties
     ==========
     The Grid class inherits properties from chart_object.ChartObject.
@@ -890,7 +890,7 @@ class Grid(ChartObject):
        lines, type: a line style constant)
      - line-style-vertical (the line style of the vertical grid lines,
        type: a line style constant).
-       
+
     Signals
     =======
     The Grid class inherits signals from chart_object.ChartObject.
@@ -1040,7 +1040,7 @@ class Grid(ChartObject):
         @return: gtk.gdk.Color.
         """
         return self.get_property("color")
-        
+
     def set_line_style_horizontal(self, style):
         """
         Set the line style of the horizontal grid lines.
@@ -1049,21 +1049,21 @@ class Grid(ChartObject):
          - pygtk_chart.LINE_STYLE_DOTTED
          - pygtk_chart.LINE_STYLE_DASHED
          - pygtk_chart.LINE_STYLE_DASHED_ASYMMETRIC.
-        
+
         @param style: the new line style
         @type style: one of the constants above.
         """
         self.set_property("line-style-horizontal", style)
         self.emit("appearance_changed")
-        
+
     def get_line_style_horizontal(self):
         """
         Returns ths current horizontal line style.
-        
+
         @return: a line style constant.
         """
         return self.get_property("line-style-horizontal")
-        
+
     def set_line_style_vertical(self, style):
         """
         Set the line style of the vertical grid lines.
@@ -1072,17 +1072,17 @@ class Grid(ChartObject):
          - pygtk_chart.LINE_STYLE_DOTTED
          - pygtk_chart.LINE_STYLE_DASHED
          - pygtk_chart.LINE_STYLE_DASHED_ASYMMETRIC.
-        
+
         @param style: the new line style
         @type style: one of the constants above.
         """
         self.set_property("line-style-vertical", style)
         self.emit("appearance_changed")
-        
+
     def get_line_style_vertical(self):
         """
         Returns ths current vertical line style.
-        
+
         @return: a line style constant.
         """
         return self.get_property("line-style-vertical")
@@ -1092,7 +1092,7 @@ class Graph(ChartObject):
     """
     This class represents a graph or the data you want to plot on your
     LineChart widget.
-    
+
     Properties
     ==========
     The Graph class inherits properties from chart_object.ChartObject.
@@ -1120,7 +1120,7 @@ class Graph(ChartObject):
        is available, type: boolean)
      - show-yerrors (sets whether y errors should be shown if error data
        is available, type: boolean).
-       
+
     Signals
     =======
     The Graph class inherits signals from chart_object.ChartObject.
@@ -1292,22 +1292,22 @@ class Graph(ChartObject):
 
     def has_something_to_draw(self):
         return self._data != []
-        
+
     def _do_draw_lines(self, context, rect, xrange, yrange, xaxis, yaxis):
         context.set_source_rgb(*color_gdk_to_cairo(self._color))
-        
+
         set_context_line_style(context, self._line_style)
-        
+
         first_point = None
         last_point = None
-        
+
         for (x, y) in self._data:
-            
+
             if xaxis.get_logarithmic():
                 x = math.log10(x)
             if yaxis.get_logarithmic():
                 y = math.log10(y)
-                
+
             if is_in_range(x, xrange) and is_in_range(y, yrange):
                 (ax, ay) = self._range_calc.get_absolute_point(rect, x, y, xaxis, yaxis)
                 if first_point == None:
@@ -1316,33 +1316,33 @@ class Graph(ChartObject):
                 else:
                     context.line_to(ax, ay)
                 last_point = ax, ay
-                    
+
         context.stroke()
         context.set_dash([])
         return first_point, last_point
-        
+
     def _do_draw_points(self, context, rect, xrange, yrange, xaxis, yaxis, highlighted_points):
         context.set_source_rgb(*color_gdk_to_cairo(self._color))
-        
+
         first_point = None
         last_point = None
-        
+
         for (x, y) in self._data:
             if xaxis.get_logarithmic():
                 x = math.log10(x)
             if yaxis.get_logarithmic():
                 y = math.log10(y)
-            
+
             if is_in_range(x, xrange) and is_in_range(y, yrange):
                 (ax, ay) = self._range_calc.get_absolute_point(rect, x, y, xaxis, yaxis)
                 if self._clickable:
                     chart.add_sensitive_area(chart.AREA_CIRCLE, (ax, ay, self._point_size), (x, y, self))
                 if first_point == None:
                     context.move_to(ax, ay)
-                    
+
                 #draw errors
                 draw_errors(context, rect, self._range_calc, x, y, self._errors, self._draw_xerrors, self._draw_yerrors, xaxis, yaxis, self._point_size)
-                    
+
                 #draw the point
                 if type(self._point_style) != gtk.gdk.Pixbuf:
                     draw_point(context, ax, ay, self._point_size, self._point_style)
@@ -1353,20 +1353,20 @@ class Graph(ChartObject):
                         context.set_source_rgb(*color_gdk_to_cairo(self._color))
                 else:
                     draw_point_pixbuf(context, ax, ay, self._point_style)
-                    
+
                 last_point = ax, ay
         return first_point, last_point
-        
+
     def _do_draw_values(self, context, rect, xrange, yrange, xaxis, yaxis):
         anchors = {}
         first_point = True
         for i, (x, y) in enumerate(self._data):
-            
+
             if xaxis.get_logarithmic():
                 x = math.log10(x)
             if yaxis.get_logarithmic():
                 y = math.log10(y)
-            
+
             if is_in_range(x, xrange) and is_in_range(y, yrange):
                 next_point = None
                 if i + 1 < len(self._data) and (is_in_range(self._data[i + 1][0], xrange) and is_in_range(self._data[i + 1][1], yrange)):
@@ -1394,14 +1394,14 @@ class Graph(ChartObject):
                             anchors[(x, y)] = label.ANCHOR_TOP_RIGHT
                         else:
                             anchors[(x, y)] = label.ANCHOR_BOTTOM_RIGHT
-                            
+
         for x, y in self._data:
-            
+
             if xaxis.get_logarithmic():
                 x = math.log10(x)
             if yaxis.get_logarithmic():
                 y = math.log10(y)
-            
+
             if (x, y) in anchors and is_in_range(x, xrange) and is_in_range(y, yrange):
                 (ax, ay) = self._range_calc.get_absolute_point(rect, x, y, xaxis, yaxis)
                 value_label = label.Label((ax, ay), str(y), anchor=anchors[(x, y)])
@@ -1425,17 +1425,17 @@ class Graph(ChartObject):
             self._label.set_position((x, y))
             self._label.set_color(self._color)
             self._label.draw(context, rect)
-            
+
     def _do_draw_fill(self, context, rect, xrange, xaxis, yaxis):
         if type(self._fill_to) in (int, float):
             data = []
             for i, (x, y) in enumerate(self._data):
-                
+
                 if xaxis.get_logarithmic():
                     x = math.log10(x)
                 if yaxis.get_logarithmic():
                     y = math.log10(y)
-                
+
                 if is_in_range(x, xrange) and not data:
                     data.append((x, self._fill_to))
                 elif not is_in_range(x, xrange) and len(data) == 1:
@@ -1450,26 +1450,26 @@ class Graph(ChartObject):
             d = graph.get_data()
             range_b = d[0][0], d[-1][0]
             xrange = intersect_ranges(xrange, range_b)
-            
+
         if not graph.get_visible(): return
-        
+
         c = self._fill_color
         if c == COLOR_AUTO: c = self._color
         c = color_gdk_to_cairo(c)
         context.set_source_rgba(c[0], c[1], c[2], self._fill_opacity)
-        
+
         data_a = self._data
         data_b = graph.get_data()
-        
+
         first = True
         start_point = (0, 0)
         for x, y in data_a:
-            
+
             if xaxis.get_logarithmic():
                 x = math.log10(x)
             if yaxis.get_logarithmic():
                 y = math.log10(y)
-            
+
             if is_in_range(x, xrange):
                 xa, ya = self._range_calc.get_absolute_point(rect, x, y, xaxis, yaxis)
                 if first:
@@ -1478,7 +1478,7 @@ class Graph(ChartObject):
                     first = False
                 else:
                     context.line_to(xa, ya)
-                
+
         first = True
         for i in range(0, len(data_b)):
             j = len(data_b) - i - 1
@@ -1499,16 +1499,16 @@ class Graph(ChartObject):
         @param rect: A rectangle representing the charts area.
         """
         (xrange, yrange) = self._range_calc.get_ranges(xaxis, yaxis)
-                
+
         if self._type in [GRAPH_LINES, GRAPH_BOTH]:
             first_point, last_point = self._do_draw_lines(context, rect, xrange, yrange, xaxis, yaxis)
-            
+
         if self._type in [GRAPH_POINTS, GRAPH_BOTH]:
             first_point, last_point = self._do_draw_points(context, rect, xrange, yrange, xaxis, yaxis, highlighted_points)
 
         if self._fill_to != None:
             self._do_draw_fill(context, rect, xrange, xaxis, yaxis)
-        
+
         if self._show_value and self._type in [GRAPH_POINTS, GRAPH_BOTH]:
             self._do_draw_values(context, rect, xrange, yrange, xaxis, yaxis)
 
@@ -1636,51 +1636,51 @@ class Graph(ChartObject):
         """
         Use this method to specify how the space under the graph should
         be filled. fill_to has to be one of these:
-        
+
          - None: dont't fill the space under the graph.
          - int or float: fill the space to the value specified (setting
            fill_to=0 means filling the space between graph and xaxis).
          - a Graph object: fill the space between this graph and the
            graph given as the argument.
-           
+
         The color of the filling is the graph's color with 30% opacity.
-           
+
         @type fill_to: one of the possibilities listed above.
         """
         self.set_property("fill-to", fill_to)
         self.emit("appearance_changed")
-        
+
     def get_fill_color(self):
         """
         Returns the color that is used to fill space under the graph
         or COLOR_AUTO.
-        
+
         @return: gtk.gdk.Color or COLOR_AUTO.
         """
         return self.get_property("fill-color")
-        
+
     def set_fill_color(self, color):
         """
         Set which color should be used when filling the space under a
         graph.
         If color is COLOR_AUTO, the graph's color will be used.
-        
+
         @type color: gtk.gdk.Color or COLOR_AUTO.
         """
         self.set_property("fill-color", color)
         self.emit("appearance_changed")
-        
+
     def get_fill_opacity(self):
         """
         Returns the opacity that is used to fill space under the graph.
         """
         return self.get_property("fill-opacity")
-        
+
     def set_fill_opacity(self, opacity):
         """
         Set which opacity should be used when filling the space under a
         graph. The default is 0.3.
-        
+
         @type opacity: float in [0, 1].
         """
         self.set_property("fill-opacity", opacity)
@@ -1736,15 +1736,15 @@ class Graph(ChartObject):
         self._data += new_data
         self._errors = dict(self._errors, **new_errors)
         self._range_calc.add_graph(self)
-        
+
     def get_data(self):
         """
         Returns the data of the graph.
-        
+
         @return: a list of x, y pairs.
         """
         return self._data
-        
+
     def set_line_style(self, style):
         """
         Set the line style that should be used for drawing the graph
@@ -1754,22 +1754,22 @@ class Graph(ChartObject):
          - pygtk_chart.LINE_STYLE_DOTTED
          - pygtk_chart.LINE_STYLE_DASHED
          - pygtk_chart.LINE_STYLE_DASHED_ASYMMETRIC.
-        
+
         @param style: the new line style
         @type style: one of the line style constants above.
         """
         self.set_property("line-style", style)
         self.emit("appearance_changed")
-        
+
     def get_line_style(self):
         """
         Returns the current line style for the graph (see
         L{set_line_style} for details).
-        
+
         @return: a line style constant.
         """
         return self.get_property("line-style")
-        
+
     def set_point_style(self, style):
         """
         Set the point style that should be used when drawing the graph
@@ -1782,81 +1782,81 @@ class Graph(ChartObject):
          - pygtk_chart.POINT_STYLE_TRIANGLE_DOWN
          - pygtk_chart.POINT_STYLE_DIAMOND
         style can also be a gtk.gdk.Pixbuf that should be used as point.
-        
+
         @param style: the new point style
         @type style: one of the cosnatnts above or gtk.gdk.Pixbuf.
         """
         self.set_property("point-style", style)
         self.emit("appearance_changed")
-        
+
     def get_point_style(self):
         """
-        Returns the current point style. See L{set_point_style} for 
+        Returns the current point style. See L{set_point_style} for
         details.
-        
+
         @return: a point style constant or gtk.gdk.Pixbuf.
         """
         return self.get_property("point-style")
-        
+
     def set_clickable(self, clickable):
         """
         Set whether the datapoints of the graph should be clickable
         (only if the datapoints are shown).
         If this is set to True, the LineChart will emit the signal
         'datapoint-clicked' when a datapoint was clicked.
-        
+
         @type clickable: boolean.
         """
         self.set_property("clickable", clickable)
         self.emit("appearance_changed")
-        
+
     def get_clickable(self):
         """
         Returns True if the datapoints of the graph are clickable.
-        
+
         @return: boolean.
         """
         return self.get_property("clickable")
-        
+
     def set_show_xerrors(self, show):
         """
         Use this method to set whether x-errorbars should be shown
         if error data is available.
-        
+
         @type show: boolean.
         """
         self.set_property("show-xerrors", show)
         self.emit("appearance_changed")
-        
+
     def get_show_xerrors(self):
         """
         Returns True if x-errorbars should be drawn if error data is
         available.
-        
+
         @return: boolean.
         """
         return self.get_property("show-xerrors")
-        
+
     def set_show_yerrors(self, show):
         """
         Use this method to set whether y-errorbars should be shown
         if error data is available.
-        
+
         @type show: boolean.
         """
         self.set_property("show-yerrors", show)
         self.emit("appearance_changed")
-        
+
     def get_show_yerrors(self):
         """
         Returns True if y-errorbars should be drawn if error data is
         available.
-        
+
         @return: boolean.
         """
         return self.get_property("show-yerrors")
-        
-        
+
+
 def graph_new_from_function(func, xmin, xmax, graph_name, samples=100, do_optimize_sampling=True):
     """
     Returns a line_chart.Graph with data created from the function
@@ -1866,7 +1866,7 @@ def graph_new_from_function(func, xmin, xmax, graph_name, samples=100, do_optimi
     evaluated in [xmin, xmax] (default: 100).
     If do_optimize_sampling is True (default) additional points will be
     evaluated to smoothen the curve.
-    
+
     @type func: a function
     @param func: the function to evaluate
     @type xmin: float
@@ -1879,8 +1879,8 @@ def graph_new_from_function(func, xmin, xmax, graph_name, samples=100, do_optimi
     @param samples: number of samples
     @type do_optimize_sampling: boolean
     @param do_optimize_sampling: set whether to add additional points
-    
-    @return: line_chart.Graph    
+
+    @return: line_chart.Graph
     """
     delta = (xmax - xmin) / float(samples - 1)
     data = []
@@ -1888,12 +1888,12 @@ def graph_new_from_function(func, xmin, xmax, graph_name, samples=100, do_optimi
     while x <= xmax:
         data.append((x, func(x)))
         x += delta
-        
+
     if do_optimize_sampling:
         data = optimize_sampling(func, data)
-        
+
     return Graph(graph_name, "", data)
-    
+
 def optimize_sampling(func, data):
     new_data = []
     prev_point = None
@@ -1909,34 +1909,34 @@ def optimize_sampling(func, data):
                     new_data.append((nx, ny))
                     #print abs(slope - prev_slope), prev_point[0], nx, x
             prev_slope = slope
-        
+
         prev_point = x, y
-    
+
     if new_data:
         data += new_data
         data.sort(lambda x, y: cmp(x[0], y[0]))
         return optimize_sampling(func, data)
     else:
         return data
-        
+
 def graph_new_from_file(filename, graph_name, x_col=0, y_col=1, xerror_col=-1, yerror_col=-1):
     """
     Returns a line_chart.Graph with point taken from data file
     filename.
-    The id of the new graph is graph_name.    
-    
+    The id of the new graph is graph_name.
+
     Data file format:
     The columns in the file have to be separated by tabs or one
     or more spaces. Everything after '#' is ignored (comment).
-    
+
     Use the parameters x_col and y_col to control which columns to use
     for plotting. By default, the first column (x_col=0) is used for
     x values, the second (y_col=1) is used for y values.
-    
+
     The parameters xerror_col and yerror_col should point to the column
     in which the x/y error values are. If you do not want to provide
     x or y error data, omit the paramter or set it to -1 (default).
-    
+
     @type filename: string
     @param filename: path to the data file
     @type graph_name: string
@@ -1949,7 +1949,7 @@ def graph_new_from_file(filename, graph_name, x_col=0, y_col=1, xerror_col=-1, y
     @param xerror_col: index of the column for x error values
     @type yerror_col: int
     @param yerror_col: index of the column for y error values
-    
+
     @return: line_chart.Graph
     """
     points = []
@@ -1957,10 +1957,10 @@ def graph_new_from_file(filename, graph_name, x_col=0, y_col=1, xerror_col=-1, y
     data = f.read()
     f.close()
     lines = data.split("\n")
-    
+
     for line in lines:
         line = line.strip() #remove special characters at beginning and end
-        
+
         #remove comments:
         a = line.split("#", 1)
         if a and a[0]:
@@ -1977,20 +1977,20 @@ def graph_new_from_file(filename, graph_name, x_col=0, y_col=1, xerror_col=-1, y
                 d = line.split(" ")
             d = filter(lambda x: x, d)
             d = map(lambda x: float(x), d)
-            
+
             new_data = (d[x_col], d[y_col])
-            
+
             if xerror_col != -1 or yerror_col != -1:
                 xerror = 0
                 yerror = 0
-                
+
                 if xerror_col != -1:
                     xerror = d[xerror_col]
                 if yerror_col != -1:
                     yerror = d[yerror_col]
-                
+
                 new_data = (d[x_col], d[y_col], xerror, yerror)
-                
+
             points.append(new_data)
     return Graph(graph_name, "", points)
 
@@ -1998,28 +1998,28 @@ def graph_new_from_file(filename, graph_name, x_col=0, y_col=1, xerror_col=-1, y
 class Legend(ChartObject):
     """
     This class represents a legend on a line chart.
-    
+
     Properties
     ==========
     The Legend class inherits properties from chart_object.ChartObject.
     Additional properties:
      - position (the legend's position on the chart, type: a corner
        position constant).
-       
+
     Signals
     =======
-    The Legend class inherits signals from chart_object.ChartObject.    
+    The Legend class inherits signals from chart_object.ChartObject.
     """
-    
+
     __gproperties__ = {"position": (gobject.TYPE_INT, "legend position",
                                     "Position of the legend.", 8, 11, 8,
                                     gobject.PARAM_READWRITE)}
-    
+
     def __init__(self):
         ChartObject.__init__(self)
         self._show = False
         self._position = POSITION_TOP_RIGHT
-        
+
     def do_get_property(self, property):
         if property.name == "visible":
             return self._show
@@ -2039,7 +2039,7 @@ class Legend(ChartObject):
             self._position = value
         else:
             raise AttributeError, "Property %s does not exist." % property.name
-        
+
     def _do_draw(self, context, rect, graphs):
         context.set_line_width(1)
         width = 0.2 * rect.width
@@ -2047,19 +2047,19 @@ class Legend(ChartObject):
 
         x = rect.width - width
         y = 16
-        
+
         total_height = 0
         total_width = 0
         for id, graph in graphs.iteritems():
             if not graph.get_visible(): continue
             graph_label = label.Label((x + (width - label_width), y), graph.get_title(), anchor=label.ANCHOR_TOP_LEFT)
             graph_label.set_max_width(label_width)
-            
+
             rwidth, rheight = graph_label.get_calculated_dimensions(context, rect)
-            
+
             total_height += rheight + 6
             total_width = max(total_width, rwidth)
-            
+
         total_width += 18 + 20
         if self._position == POSITION_TOP_RIGHT:
             x = rect.width - total_width - 16
@@ -2073,7 +2073,7 @@ class Legend(ChartObject):
         elif self._position == POSITION_TOP_LEFT:
             x = 16
             y = 16
-        
+
         context.set_antialias(cairo.ANTIALIAS_NONE)
         context.set_source_rgb(1, 1, 1)
         context.rectangle(x, y - 3, total_width, total_height)
@@ -2081,14 +2081,14 @@ class Legend(ChartObject):
         context.set_source_rgb(0, 0, 0)
         context.stroke()
         context.set_antialias(cairo.ANTIALIAS_DEFAULT)
-        
+
         for id, graph in graphs.iteritems():
             if not graph.get_visible(): continue
             #draw the label
             graph_label = label.Label((x + (width - label_width), y), graph.get_title(), anchor=label.ANCHOR_TOP_LEFT)
             graph_label.set_max_width(label_width)
             graph_label.draw(context, rect)
-            
+
             #draw line
             if graph.get_type() in [GRAPH_LINES, GRAPH_BOTH]:
                 lines = graph_label.get_line_count()
@@ -2107,10 +2107,10 @@ class Legend(ChartObject):
                     draw_point(context, x + 6 + 20, y + line_height / 2, graph.get_point_size(), graph.get_point_style())
                 else:
                     draw_point_pixbuf(context, x + 6 + 20, y + line_height / 2, graph.get_point_style())
-                    
-            
+
+
             y += graph_label.get_real_dimensions()[1] + 6
-            
+
     def set_position(self, position):
         """
         Set the position of the legend. position has to be one of these
@@ -2119,18 +2119,18 @@ class Legend(ChartObject):
          - line_chart.POSITION_BOTTOM_RIGHT
          - line_chart.POSITION_BOTTOM_LEFT
          - line_chart.POSITION_TOP_LEFT
-        
+
         @param position: the legend's position
         @type position: one of the constants above.
         """
         self.set_property("position", position)
         self.emit("appearance_changed")
-        
+
     def get_position(self):
         """
         Returns the position of the legend. See L{set_position} for
         details.
-        
+
         @return: a position constant.
         """
         return self.get_property("position")
